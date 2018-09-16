@@ -1,5 +1,6 @@
 # pre-class
-
+Kevin Chen
+PHP1560
 
 Make sure you commit this often with meaningfull messages. 
 
@@ -45,21 +46,38 @@ sd(exp.draws.10)
 
 3. The function `plot()` is the generic function in R for the visual display of data. `hist()` is a function that takes in and bins data as a side effect. To use this function, we must first specify what we'd like to plot.
     a. Use the `hist()` function to produce a histogram of your standard exponential distribution.
-
-hist(exp.draws.1) 
+    
+    hist(exp.draws.1) 
 
     b. Use `plot()` with this vector to display the random values from your standard distribution in order.
     
-plot()
+    plot(exp.draws.1)
 
     c. Now, use `plot()` with two arguments -- any two of your other stored random value vectors -- to create a scatterplot of the two vectors against each other.
+    
+    plot(exp.draws.5, exp.draws.10)
 
 4. We'd now like to compare the properties of each of our vectors. Begin by creating a vector of the means of each of our five distributions in the order we created them and saving this to a variable name of your choice. Using this and other similar vectors, create the following scatterplots and explain in words what is going on:
     a. The five means versus the five rates used to generate the distribution.
+    
+    means <- c(mean(exp.draws.0.2), mean(exp.draws.1), mean(exp.draws.10), mean(exp.draws.5), mean(exp.draws.7.3))
+    rates <- c(0.2, 1, 10, 5, 7.3)
+    plot(rates, means, main = "Means vs. Rates", ylab = "Means", xlab = "Rates")
+    
     b. The standard deviations versus the rates.
+    
+    std.devs <- c(sd(exp.draws.0.2), sd(exp.draws.1), sd(exp.draws.10), sd(exp.draws.5), sd(exp.draws.7.3))
+    plot(rates, std.devs, main = "Standard Deviations vs. Rates", ylab = "Standard Deviations", xlab = "Rates")
+    
     c. The means versus the standard deviations.
+    
+    plot(std.devs, means, main = "Means vs. Standard Deviations", ylab = "Means", xlab = "Standard Deviations")
 
 For each plot, explain in words what's going on.
+
+For the first plot, that of means vs. rates, as the rate increases, the mean exponentially decreases. 
+For the second plot, that of standard deviations vs. rates, as the rate increases, the standard deviation exponentially decreases.
+For the final plot, that of means vs. standard deviations, the means and standard deviations appear to be perfectly correlated. This suggests that the mean of an exponential distribution is also its standard deviation.
 
 ### Part II (PHP 2560 Only)
 
