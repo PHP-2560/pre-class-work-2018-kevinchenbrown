@@ -73,5 +73,42 @@ France had the strongest correlation between life expectancy and per capita GDP,
 
 
 8. Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?
+```{r}
+gapminder %>%
+  group_by(country) %>% #group by country
+  summarise(sd_pop = sd(pop)) %>% #calculate standard deviation of population estimates
+  arrange(sd_pop) #sort by least to greatest
+```
+Sao Tome and Principe had the most consistent population estimates across the years of available data, followed by Iceland, and then Montenegro.
+
 9. Subset gm to only include observations from 1992 and store the results as gm1992. What kind of object is this?
+```{r}
+gm1992 <- gapminder %>%
+  filter(year == "1992")
+gm1992
+class(gm1992)
+```
+gm1992 is a tibble.
+
 10. Which observations indicate that the population of a country has decreased from the previous year and the life expectancy has increased from the previous year? See the vignette on window functions.
+```{r}
+countries <- gapminder %>%
+  select(country, year, pop, lifeExp) %>%
+  group_by(country)
+
+# For each player, find the two years with most hits
+filter(players, min_rank(desc(H)) <= 2 & H > 0)
+# Within each player, rank each year by the number of games played
+mutate(players, G_rank = min_rank(G))
+# For each player, find every year that was better than the previous year
+filter(players, G > lag(G))
+
+countries %>%
+  mutate(pop_rank = min_rank(pop)) %>% #within each country, rank each year by population size
+  filter(pop_rank > lead(pop_rank)) #for each country, find every year that had a smaller population size than the previous year
+
+life <- countries %>%
+  mutate(life_rank = min_rank(lifeExp)) %>% #within each country, rank each year by life expectancy
+  filter(life_rank > lag(life_rank)) #for each country, find every year that had a greater life expectancy than the previous year
+```
+
