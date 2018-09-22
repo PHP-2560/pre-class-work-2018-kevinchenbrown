@@ -5,6 +5,71 @@ date: "9/22/2018"
 output: html_document
 ---
 
+Getting Started
+We will work with the dataset called gapminder, this is a cleaned up version from Gapminder Data. Gapminder contains a lot of great data on all of the nations of the world. We first need to install the gapminder package in R.
+
 ```{r}
+install.packages("gapminder")
+library(dplyr)
+library(gapminder)
+gapminder
+```
+
+Pre-Class Problems
+Use dplyr functions to address the following questions:
+
+1. How many unique countries are represented per continent?
+```{r}
+gapminder %>%
+  group_by(continent) %>% #group by continents first
+  summarise(unique_countries = n_distinct(country)) #number of distinct countries by continent
+```
+In this dataset, Africa has 52 unique countries, the Americas have 25, Asia has 33, Europe has 30, and Oceania has 2.
+
+2. Which European nation had the lowest GDP per capita in 1997?
+```{r}
+gapminder %>%
+  filter(continent == "Europe" & year == "1997") %>% #look at Europe and 1997 only
+  slice(which.min(gdpPercap)) #select the country with the lowest GDP per capita
+```
+Albania had the lowest GDP per capita in 1997.
+
+3. According to the data available, what was the average life expectancy across each continent in the 1980s?
+```{r}
+gapminder %>%
+  group_by(continent) %>% #group by continents
+  filter(year >= 1980 & year <= 1989) %>% #look at the 1980s only
+  summarise(avg_lifeExp = mean(lifeExp)) #calculate the average life expectancy
+```
+In the 1980s, Africa had an average life expectancy of 52.5 years, the Americas had an average life expectancy of 67.2 years, Asia had an average life expectancy of 63.7 years, Europe had an average life expectancy of 73.2 years, and Oceania had an average life expectancy of 74.8 years.
+
+4. What 5 countries have the highest total GDP over all years combined?
+```{r}
+gapminder %>%
+  group_by(country) %>%
+  mutate(total_GDP = sum(gdpPercap)) %>%
+  arrange(desc(total_GDP))
 
 ```
+
+
+5. What countries and years had life expectancies of at least 80 years? N.b. only output the columns of interest: country, life expectancy and year (in that order).
+```{r}
+gapminder %>%
+  filter(lifeExp >= 80) %>% #filter life expectancies greater than or equal to 80
+  select(country, lifeExp, year) #only display columns of interest
+```
+
+6. What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?
+```{r}
+gapminder %>%
+  
+```
+
+7. Which combinations of continent (besides Asia) and year have the highest average population across all countries? N.b. your output should include all results sorted by highest average population. With what you already know, this one may stump you. See this Q&A for how to ungroup before arrangeing. This also behaves differently in more recent versions of dplyr.
+
+
+
+8. Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?
+9. Subset gm to only include observations from 1992 and store the results as gm1992. What kind of object is this?
+10. Which observations indicate that the population of a country has decreased from the previous year and the life expectancy has increased from the previous year? See the vignette on window functions.
