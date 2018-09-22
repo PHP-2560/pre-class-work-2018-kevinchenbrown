@@ -1,0 +1,10 @@
+---
+title: 'Pre-Class: Week 3'
+author: "Kevin Chen"
+date: "9/22/2018"
+output: html_document
+---
+
+```{r}
+
+```
