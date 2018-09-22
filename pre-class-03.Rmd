@@ -46,12 +46,11 @@ In the 1980s, Africa had an average life expectancy of 52.5 years, the Americas 
 4. What 5 countries have the highest total GDP over all years combined?
 ```{r}
 gapminder %>%
-  group_by(country) %>%
-  mutate(total_GDP = sum(gdpPercap)) %>%
-  arrange(desc(total_GDP))
-
+  group_by(country) %>% #first, group by country
+  summarise(total_GDP = sum(gdpPercap)) %>% #sum up GDP per capita for each country
+  arrange(desc(total_GDP)) #arrange total_GDP in descending order
 ```
-
+Kuwait had the highest total GDP per capita over all years combined, followed by Switzerland, then Norway, then the United States, and then Canada.
 
 5. What countries and years had life expectancies of at least 80 years? N.b. only output the columns of interest: country, life expectancy and year (in that order).
 ```{r}
@@ -63,8 +62,11 @@ gapminder %>%
 6. What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?
 ```{r}
 gapminder %>%
-  
+  group_by(country) %>% #group by country
+  summarise(correlation = abs(cor(lifeExp, gdpPercap))) %>% #calculate the absolute value of correlation between life expectancy and per capita GDP
+  arrange((desc(correlation))) #arrange correlation in descending order
 ```
+France had the strongest correlation between life expectancy and per capita GDP, followed by Austria, then Belgium, then Norway, then Oman, then the United Kingdom, then Italy, then Israel, then Denmark, and then Australia.
 
 7. Which combinations of continent (besides Asia) and year have the highest average population across all countries? N.b. your output should include all results sorted by highest average population. With what you already know, this one may stump you. See this Q&A for how to ungroup before arrangeing. This also behaves differently in more recent versions of dplyr.
 
