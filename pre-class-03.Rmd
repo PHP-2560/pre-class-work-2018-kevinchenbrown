@@ -69,8 +69,13 @@ gapminder %>%
 France had the strongest correlation between life expectancy and per capita GDP, followed by Austria, then Belgium, then Norway, then Oman, then the United Kingdom, then Italy, then Israel, then Denmark, and then Australia.
 
 7. Which combinations of continent (besides Asia) and year have the highest average population across all countries? N.b. your output should include all results sorted by highest average population. With what you already know, this one may stump you. See this Q&A for how to ungroup before arrangeing. This also behaves differently in more recent versions of dplyr.
-
-
+```{r}
+gapminder %>%
+  filter(continent != "Asia") %>% #exclude Asia
+  group_by(continent, year) %>% #group by continent and year
+  summarise(avg_pop = mean(pop)) %>% #calculate average population 
+  arrange(desc(avg_pop)) #sort by highest average population
+```
 
 8. Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?
 ```{r}
