@@ -9,8 +9,12 @@ Make sure you commit this often with meaningful messages.
 
 We will work with the dataset called [gapminder](https://github.com/jennybc/gapminder), this is a cleaned up version from [Gapminder Data](http://www.gapminder.org/data/). Gapminder contains a lot of great data on all of the nations of the world. We first need to install the gapminder package in R. 
 
-```{r}
+```
 install.packages("gapminder")
+```
+
+```{r}
+
 library(dplyr)
 library(gapminder)
 gapminder
@@ -100,15 +104,13 @@ class(gm1992)
 ```
 gm1992 is a tibble.
 
-10. Which observations indicate that the population of a country has decreased from the previous year and the life expectancy has increased from the previous year? See the vignette on window functions.
+10. Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 ```{r}
 countries <- gapminder %>%
   select(country, year, pop, lifeExp) %>% #only display country, year, pop and lifeExp
   group_by(country) #group by country
 
 countries %>%
-  filter(pop < lag(pop)) #for each country, find every year that had a smaller population size than the previous year
-
-countries %>%
+  filter(pop < lag(pop)) %>% #for each country, find every year that had a smaller population size than the previous year
   filter(lifeExp > lag(lifeExp)) #for each country, find every year that had a greater life expectancy than the previous year
 ```
