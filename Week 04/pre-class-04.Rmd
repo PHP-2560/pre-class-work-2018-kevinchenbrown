@@ -8,15 +8,47 @@ Make sure you commit this often with meaningful messages.
 
 ### Question 1:
 
-Using a loop, print the integers from 1 to 50. 
+Using a loop, print the integers from 1 to 50.
+```{r}
+for (i in 1:50) {
+  print(i)
+}
+
+```
 
 ### Question 2:
 
 A.  Using a loop, add all the integers between 0 and 1000.
+```{r}
+i <- 0
+sum <- 0
+while (i < 1000) {
+  i <- i+1
+  sum <- sum + i
+  print(sum)
+}
+```
 
 B. Now, add all the EVEN integers between 0 and 1000 (hint: use seq())
+```{r}
+i <- 0
+sum <- 0
+while(i < 1000) {
+  i <- i+2
+  sum <- sum + i
+  print(sum)
+}
+
+```
+
 
 C. Now, repeat A and B WITHOUT using a loop.
+```{r}
+sum(0:1000) #sum of all integers from 0 to 1000
+
+nums <- 0:1000 #initialize a vector of integers from 0 to 1000
+sum(nums[lapply(nums, "%%", 2) == 0]) #find the even numbers from nums and sum all of them up
+```
 
 ### Question 3:
 
