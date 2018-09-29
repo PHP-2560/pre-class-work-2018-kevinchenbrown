@@ -11,7 +11,7 @@ Make sure you commit this often with meaningful messages.
 Using a loop, print the integers from 1 to 50.
 ```{r}
 for (i in 1:50) {
-  print(i)
+  print(i) #print current integer
 }
 
 ```
@@ -20,24 +20,24 @@ for (i in 1:50) {
 
 A.  Using a loop, add all the integers between 0 and 1000.
 ```{r}
-i <- 0
-sum <- 0
+i <- 0 #provide the starting value for i
+sum <- 0 #provide the starting value for sum
 while (i < 1000) {
-  i <- i+1
-  sum <- sum + i
-  print(sum)
+  i <- i+1 #add 1 to get the next integer
+  sum <- sum + i #add this value to the previous sum
 }
+sum #print the sum
 ```
 
 B. Now, add all the EVEN integers between 0 and 1000 (hint: use seq())
 ```{r}
-i <- 0
-sum <- 0
+i <- 0 #provide the starting value for i
+sum <- 0 #provide the starting value for sum
 while(i < 1000) {
-  i <- i+2
-  sum <- sum + i
-  print(sum)
+  i <- i+2 #add 2 to get the next even integer
+  sum <- sum + i #add this value to the previous sum
 }
+sum #print the sum
 ```
 
 
@@ -83,6 +83,11 @@ survey.clean #print out cleaned survey
 
 B. Now, again using a loop, add a new column to the dataframe called “invalid.answers” that indicates, for each participant, how many bad answers they gave.
 ```{r}
-
-
+survey.clean$invalid.answers <- NA #initialize column of NAs
+for (i in 1:nrow(survey.clean)){ #repeat over the different rows
+  y <- survey.clean[i,1:ncol(survey.clean)-1] #involve all columns except for final one that has the NAs
+  x <- is.na(y) #check if cell is NA
+  survey.clean$invalid.answers[i] <- sum(x) #add number of NAs
+}
+survey.clean
 ```
