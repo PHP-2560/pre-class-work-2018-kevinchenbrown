@@ -38,7 +38,6 @@ while(i < 1000) {
   sum <- sum + i
   print(sum)
 }
-
 ```
 
 
@@ -68,4 +67,22 @@ The response to each question should be an integer between 1 and 5. Obviously, w
 
 A. Using a loop, create a new dataframe called survey.clean where all the invalid values (those that are not integers between 1 and 5) are set to NA.
 
+```{r}
+survey.clean <- survey #initialize the survey.clean dataframe
+for (row in 1:nrow(survey.clean)) {
+  for(col in 1:ncol(survey.clean)){
+    if (survey.clean[row, col] >= 1 & survey.clean[row, col] <= 5){
+      next #skip the values that are correct
+    } else {
+      survey.clean[row, col] <- NA #replace invalid values with NA
+    }
+  }
+}
+survey.clean #print out cleaned survey
+```
+
 B. Now, again using a loop, add a new column to the dataframe called “invalid.answers” that indicates, for each participant, how many bad answers they gave.
+```{r}
+
+
+```
