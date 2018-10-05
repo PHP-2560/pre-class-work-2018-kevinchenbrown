@@ -155,3 +155,4 @@ wcgs %>%
   summarise(mean_weight = mean(weight, na.rm = TRUE)) #calculate the mean weights for each group of chd
 
 ```
+Both methods returned comparable results.
