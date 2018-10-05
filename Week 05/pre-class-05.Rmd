@@ -112,7 +112,7 @@ head(WCGS.new) #check to see if select_if worked
 ```
 C. Using a loop and your new function, standardize all the variables WCGS.new dataset.
 ```{r}
-for (i in 1:ncol(WCGS.new)) {
+for (i in 1:ncol(WCGS.new)) { #loop this for all the columns in WCGS.new
   WCGS.new[,i] <-standardize.me(WCGS.new[,i]) #standardize every column of WCGS.new
 }
 head(WCGS.new) #check to see if standardize.me worked
@@ -123,12 +123,12 @@ The means and standard deviations of all my new standardized variables should be
 ```{r}
 WCGS.new.mean <- matrix(, nrow = 2, ncol = 11) #initialize empty matrix
 WCGS.new.sd <- matrix(, nrow = 2, ncol = 11) #initialize empty matrix
-for (i in 1:ncol(WCGS.new)) {
+for (i in 1:ncol(WCGS.new)) { #loop this for all the columns in WCGS.new
   WCGS.new.mean[,i] <- mean(WCGS.new[,i], na.rm = TRUE) #compute means of standardized variables
   WCGS.new.sd[,i] <- sd(WCGS.new[,i], na.rm = TRUE) #compute standard deviations of standardized variables
 }
-WCGS.new.mean
-WCGS.new.sd
+WCGS.new.mean #print out means
+WCGS.new.sd #print out standard deviations
 ```
 My results concur with my hypothesis that the means and standard deviations of all my standardized variables are 0 and 1, respectively. Although the means I obtained were not exactly 0, these results are reasonable because of the rounding R does.
 
@@ -137,5 +137,21 @@ My results concur with my hypothesis that the means and standard deviations of a
 ### Question 2: Looping to Calculate
 
 A. Using a loop, calculate the mean weight of the subjects separated by the type of CHD they have.
+```{r}
+names(wcgs) #look up variable names
+weight_means <- data.frame("type" = unique(wcgs$typchd69), "mean_weight" = NA) #initialize weight_means dataframe
+head(weight_means) #check to see if weight_data created properly
+for (i in 1:nrow(weight_means)) { #loop this for all types of CHD
+  weight_means$mean_weight[i] <- mean(subset(wcgs, typchd69 == weight_means$type[i])$weight, na.rm = TRUE) #calculate the mean for each type of CHD
+}
+weight_means #print results
+```
 B. Now do the same thing, but now don’t use a loop
+```{r}
+library(dplyr)
+wcgs %>%
+  select(typchd69, weight) %>% #select only typechd69 and weight columns
+  group_by(typchd69) %>% #group by typchd69
+  summarise(mean_weight = mean(weight, na.rm = TRUE)) #calculate the mean weights for each group of chd
 
+```
