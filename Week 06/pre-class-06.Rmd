@@ -55,15 +55,15 @@ lapply(mtcars, function(x) sd(x)/mean(x)) #lapply with the anonymous function
 ```
 
 4. Use vapply() to:
-    a. Compute the standard deviation of every column in a numeric data frame.
+      a. Compute the standard deviation of every column in a numeric data frame.
 ```{r}
 class(mtcars) #check if mtcars is a numeric dataframe
 #use mtcars as example dataframe for this exercise
 vapply(mtcars, sd, numeric(1)) #calculate sd for every column
 
 ```
-    
-    b. Compute the standard deviation of every numeric column in a mixed data frame. (Hint: you’ll need to use vapply() twice.)
+
+      b. Compute the standard deviation of every numeric column in a mixed data frame. (Hint: you’ll need to use vapply() twice.)
 
 ```{r}
 library(help = "datasets") #look for built-in datasets in R
