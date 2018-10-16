@@ -1,5 +1,5 @@
 # pre-class
-
+Kevin Chen
 
 Make sure you commit this often with meaningful messages. 
 
@@ -26,6 +26,15 @@ f3 <- function(x, y) {
 ```
 
 2. Compare and contrast rnorm() and MASS::mvrnorm(). How could you make them more consistent?
+
+```{r}
+?rnorm #check documentation for rnorm()
+?MASS::mvrnorm #check documentation for mvnorm()
+
+
+
+```
+`rnorm()` generates random samples from a univariate normal distribution, whereas `mvrnorm()` generates samples from multivariate normal distribution. `rnorm()` takes the inputs of n (number of observations), mean (vector of means), and sd (vector of standard deviations), whereas `mvrnorm()` takes the inputs of n (number of samples required), mu (a vector giving the means of the variables), and Sigma (a symmetric matrix that specifies the covariance matrix of the variables). To make the two functions consistent, I would modify the names of the inputs of `mvrnorm()` to make them to be the same of the names of the inputs of `rnorm()`. I would change mu to mean and Sigma to sd. However, sd may not make sense in the context of `mvrnorm` because `mvrnorm` takes a covariance matrix instead of a vector of standard deviations. Overall, though, both functions are consistent on their own, as both follow the same input naming convention throughout.
 
 
 3. Use `lapply()` and an anonymous function to find the coefficient of variation (the standard deviation divided by the mean) for all columns in the mtcars dataset. 
