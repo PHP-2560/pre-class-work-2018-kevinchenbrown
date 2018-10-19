@@ -32,11 +32,11 @@ With this project we will simulate a famoues probability problem. This will not 
  1. **Gambler's Ruin**: Suppose you have a bankroll of $1000 and make bets of $100 on a fair game. By simulating the outcome directly for at most 5000 iterations of the game (or hands), estimate:
     a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet.
 ```{r}
-gamblers_ruin <- function(bet, bankroll, p){
-  n <- 0
+gamblers_ruin <- function(bet, bankroll, p){ #inputs are the bet amount (bet), the starting bankroll minus the first placed bet amount (bankroll), and the probabilty of sucess (p)
+  n <- 0 #initialize 
   while (bet > 0) {
     probval <- runif(1)
-    if (probval <= p) {
+    if (probval <= p) { 
       bankroll <- bet + bankroll
       bet <- (bet + bankroll)*0.1
     } else {
@@ -54,25 +54,25 @@ set.seed(1)
 duration <- numeric()
 max <- 5000
 for (i in 1:max){
-  next_duration <- gamblers_ruin(100, 1000, p = 0.5)
+  next_duration <- gamblers_ruin(100, 900, p = 0.5)
   duration <- c(duration, next_duration)
 }
 prob_100 <- length(which(duration <= 100))/length(duration)
 prob_100
 
 ```
-The probability I have busted by the time I have placed my 100th bet is 0.1184.
+The probability I have busted by the time I have placed my 100th bet is 0.1198.
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
 ```{r}
 prob_500 <- length(which(duration <= 500))/length(duration)
 prob_500
 ```
-The probability I have busted by the time I have placed my 500th best is 0.4766.
+The probability I have busted by the time I have placed my 500th best is 0.4774.
     c. the mean time you go bust, given that you go bust within the first 5000 hands.
 ```{r}
 mean(duration)
 ```
-The mean time I go bust is after 762.6828 hands.
+The mean time I go bust is after 761.555 hands.
     d. the mean and variance of your bankroll after 100 hands (including busts).
 ```{r}
 gamblers_ruin_100 <- function(bet, bankroll, p){
@@ -100,7 +100,7 @@ gamblers_ruin_100 <- function(bet, bankroll, p){
 bankroll <- numeric()
 for(i in 1:5000)
 {
-  next_bankroll <- gamblers_ruin_100(100, 1000, 0.5)
+  next_bankroll <- gamblers_ruin_100(100, 900, 0.5)
   bankroll <- c(bankroll, next_bankroll)
 }
 
@@ -135,7 +135,7 @@ gamblers_ruin_500 <- function(bet, bankroll, p){
 bankroll <- numeric()
 for(i in 1:5000)
 {
-  next_bankroll <- gamblers_ruin_100(100, 1000, 0.5)
+  next_bankroll <- gamblers_ruin_100(100, 900, 0.5)
   bankroll <- c(bankroll, next_bankroll)
 }
 
@@ -177,7 +177,7 @@ markov <- function(bet, bankroll, p){
 
 size <- numeric()
 for (i in 1:100) {
-  next_size <- markov(100, 1000, 0.48)
+  next_size <- markov(100, 900, 0.48)
   size <- c(size, next_size)
 }
 mean(size)
@@ -185,6 +185,57 @@ mean(size)
 This is not a fair game because the mean size of my return is 0.
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
 ```{r}
+set.seed(1)
+prop = numeric()
+for (j in 1:20) {
+  size = numeric()
+  M <- 100
+  for(i in 1:M) {
+    next_size <- markov(100, 900, 0.46+0.002*j)
+    size <- c(size, next_size)
+  }
+  next_prop <- length(which(size == 0))/100
+  prop <- c(prop,next_prop)
+}
+prop
+```
+    c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it.
+```{r}
+markov_inc <- function(bet, bankroll, p, increment){
+  n <- 0
+  prob <- p
+  while (bet > 0) {
+    probval <- runif(1)
+    if(probval <= p)
+    {
+      bankroll <- bankroll + bet
+      p <- p + increment
+    }else{
+      bankroll <- bankroll - bet
+      p <- prob
+    }
+    n <- n + 1
+    if (n == 100000) {
+      break
+      }
+    if (bankroll < bet) {
+      break
+      }
+  }
+  return(bankroll)
+}
+
+prop = numeric()
+for (j in 1:20) {
+  size = numeric()
+  M <- 100
+  for(i in 1:M) {
+    next_size <- markov_inc(100, 900, 0.48, 0.002*j)
+    size <- c(size, next_size)
+  }
+  next_prop <- length(which(size == 0))/100
+  prop <- c(prop,next_prop)
+}
+prop
 
 ```
-    c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it. 
