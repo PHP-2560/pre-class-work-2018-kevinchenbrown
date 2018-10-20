@@ -34,47 +34,48 @@ With this project we will simulate a famoues probability problem. This will not 
 ```{r}
 gamblers_ruin <- function(bet, bankroll, p){ #inputs are the bet amount (bet), the starting bankroll minus the first placed bet amount (bankroll), and the probabilty of sucess (p)
   n <- 0 #initialize 
-  while (bet > 0) {
-    probval <- runif(1)
-    if (probval <= p) { 
+  while (bet > 0) { #run this loop while 
+    probval <- runif(1) #generate a random value from the uniform distribution
+    if (probval <= p) { #if wins hand (probval <= p), raise the bet by fixed fraction of bankroll (10%)
       bankroll <- bet + bankroll
-      bet <- (bet + bankroll)*0.1
-    } else {
+      bet <- (bet + bankroll)*0.1 
+    } else { #if lose hand, bet remains the same
       bankroll <- bankroll - bet
       bet <- bet
     }
-    n <- n + 1
-    if (bankroll < bet){
+    n <- n + 1 #increase the count by 1
+    if (n > 5000) { #when count goes over 5000, stop simulation
+      break
+    }
+    if (bankroll < bet){ #or when bankroll becomes less than bet amount, stop simulation
       break
     }
   }
-  return(n)
+  return(n) #return the number of hands played
 }
-set.seed(1)
+set.seed(1) #set.seed() to ensure replicability
 duration <- numeric()
-max <- 5000
-for (i in 1:max){
-  next_duration <- gamblers_ruin(100, 900, p = 0.5)
+
+for (i in 1:5000){ #run the simulation 5000 times
+  next_duration <- gamblers_ruin(100, 900, p = 0.5) #fill the duration vector using the gamblers_ruin function
   duration <- c(duration, next_duration)
 }
-prob_100 <- length(which(duration <= 100))/length(duration)
-prob_100
-
+length(which(duration <= 100))/length(duration) #probability of busting by the 100th bet
 ```
 The probability I have busted by the time I have placed my 100th bet is 0.1198.
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
 ```{r}
-prob_500 <- length(which(duration <= 500))/length(duration)
-prob_500
+length(which(duration <= 500))/length(duration) #probability of busting by the 500th bet
 ```
-The probability I have busted by the time I have placed my 500th best is 0.4774.
+The probability I have busted by the time I have placed my 500th bet is 0.4778.
     c. the mean time you go bust, given that you go bust within the first 5000 hands.
 ```{r}
-mean(duration)
+mean(duration) #return the mean of the duration vector
 ```
-The mean time I go bust is after 761.555 hands.
+The mean time I go bust is after 760.7496 hands.
     d. the mean and variance of your bankroll after 100 hands (including busts).
 ```{r}
+#modify the original gambles_ruin function to break after 100 hands
 gamblers_ruin_100 <- function(bet, bankroll, p){
   n <- 0
   while (bet > 0) {
@@ -87,29 +88,31 @@ gamblers_ruin_100 <- function(bet, bankroll, p){
       bet <- bet
     }
     n <- n + 1
-    if (n == 100) {
+    if (n > 100) { #break after 100 hands
       break
     }
     if (bankroll < bet){
       break
     }
   }
-  return(bankroll)
+  return(bankroll) #return the bankroll
 }
 
 bankroll <- numeric()
-for(i in 1:5000)
+for(i in 1:5000) #run simulation 5000 times
 {
-  next_bankroll <- gamblers_ruin_100(100, 900, 0.5)
+  next_bankroll <- gamblers_ruin_100(100, 900, 0.5) #fill the bankroll vector using the modified gamblers_ruin function
   bankroll <- c(bankroll, next_bankroll)
 }
 
-mean(bankroll)
+mean(bankroll) #return the mean and variance of the bankroll vector
 var(bankroll)
 
 ```
+The mean and variance of my bankroll after 100 hands are 898.2888 and 2669616, respectively.
     e. the mean and variance of your bankroll after 500 hands (including busts).
 ```{r}
+#modify the gambles_ruin_100 function to break after 500 hands
 gamblers_ruin_500 <- function(bet, bankroll, p){
   n <- 0
   while (bet > 0) {
@@ -122,29 +125,28 @@ gamblers_ruin_500 <- function(bet, bankroll, p){
       bet <- bet
     }
     n <- n + 1
-    if (n == 500) {
+    if (n > 500) { #break after 500 hands
       break
     }
     if (bankroll < bet){
       break
     }
   }
-  return(bankroll)
+  return(bankroll) #return the bankroll
 }
 
 bankroll <- numeric()
-for(i in 1:5000)
+for(i in 1:5000) #run the simulation 5000 times
 {
-  next_bankroll <- gamblers_ruin_100(100, 900, 0.5)
+  next_bankroll <- gamblers_ruin_500(100, 900, 0.5) #fill the bankroll vector using the modified gamblers_ruin function
   bankroll <- c(bankroll, next_bankroll)
 }
 
-mean(bankroll)
+mean(bankroll) #return the mean and variance of the bankroll vector
 var(bankroll)
-
-
 ```
- 
+The mean and variance of my bankroll after 500 hands are 646.9557 and 31803410, respectively.
+
 Note: you *must* stop playing if your player has gone bust. How will you handle this in the `for` loop?
 
 
