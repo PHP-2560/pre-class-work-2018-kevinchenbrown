@@ -153,21 +153,21 @@ Note: you *must* stop playing if your player has gone bust. How will you handle 
 2. **Markov Chains**. Suppose you have a game where the probability of winning on your first hand is 48%; each time you win, that probability goes up by one percentage point for the next game (to a maximum of 100%, where it must stay), and each time you lose, it goes back down to 48%. Assume you cannot go bust and that the size of your wager is a constant $100.
     a. Is this a fair game? Simulate one hundred thousand sequential hands to determine the size of your return. Then repeat this simulation 99 more times to get a range of values to calculate the expectation.
 ```{r}
+#build the markov function based off the gamblers_ruin function
 markov <- function(bet, bankroll, p){
   n <- 0
   prob <- p
   while (bet > 0) {
     probval <- runif(1)
-    if(probval <= p)
-    {
+    if (probval <= p) {
       bankroll <- bankroll + bet
       p <- p + 0.01
-    }else{
+    }else {
       bankroll <- bankroll - bet
       p <- prob
     }
     n <- n + 1
-    if (n == 100000) {
+    if (n == 100000) { #simulate 100,000 sequential hands
       break
       }
     if (bankroll < bet) {
@@ -178,11 +178,11 @@ markov <- function(bet, bankroll, p){
 }
 
 size <- numeric()
-for (i in 1:100) {
-  next_size <- markov(100, 900, 0.48)
+for (i in 1:100) { #simulate 100 times
+  next_size <- markov(100, 900, 0.48) #fill the size vector using the markov function
   size <- c(size, next_size)
 }
-mean(size)
+mean(size) #calculate the mean size of returns
 ```
 This is not a fair game because the mean size of my return is 0.
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
@@ -191,18 +191,18 @@ set.seed(1)
 prop = numeric()
 for (j in 1:20) {
   size = numeric()
-  M <- 100
-  for(i in 1:M) {
-    next_size <- markov(100, 900, 0.46+0.002*j)
+  for(i in 1:100) { #simulate 100 times
+    next_size <- markov(100, 900, 0.46+0.002*j) #fill the size vector using the markov function
     size <- c(size, next_size)
   }
-  next_prop <- length(which(size == 0))/100
-  prop <- c(prop,next_prop)
+  next_prop <- length(which(size == 0))/100 #calculate the proportion of 0 return
+  prop <- c(prop,next_prop) #build up the prop vector
 }
 prop
 ```
     c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it.
 ```{r}
+#modify the markov function by including an increment input
 markov_inc <- function(bet, bankroll, p, increment){
   n <- 0
   prob <- p
@@ -211,7 +211,7 @@ markov_inc <- function(bet, bankroll, p, increment){
     if(probval <= p)
     {
       bankroll <- bankroll + bet
-      p <- p + increment
+      p <- p + increment #add the specified increment to p, instead of a fixed value
     }else{
       bankroll <- bankroll - bet
       p <- prob
@@ -230,13 +230,12 @@ markov_inc <- function(bet, bankroll, p, increment){
 prop = numeric()
 for (j in 1:20) {
   size = numeric()
-  M <- 100
-  for(i in 1:M) {
-    next_size <- markov_inc(100, 900, 0.48, 0.002*j)
+  for(i in 1:100) { #simulate 100 times
+    next_size <- markov_inc(100, 900, 0.48, 0.002*j) #fill the size vector using the markov_inc function
     size <- c(size, next_size)
   }
-  next_prop <- length(which(size == 0))/100
-  prop <- c(prop,next_prop)
+  next_prop <- length(which(size == 0))/100 #calculate the proportion of 0 return
+  prop <- c(prop,next_prop) #build up the prop vector
 }
 prop
 
