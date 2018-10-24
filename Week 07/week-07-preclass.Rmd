@@ -34,13 +34,13 @@ With this project we will simulate a famoues probability problem. This will not 
 ```{r}
 gamblers_ruin <- function(bet, bankroll, p){ #inputs are the bet amount (bet), the starting bankroll minus the first placed bet amount (bankroll), and the probabilty of sucess (p)
   n <- 0 #initialize 
-  while (bet > 0) { #run this loop while 
-    probval <- runif(1) #generate a random value from the uniform distribution
+  while (bet > 0) { #run this loop while bets are greater than 0
+    probval <- runif(1) #generate one random value from the uniform distribution, use it as the probability of winning the hand
     if (probval <= p) { #if wins hand (probval <= p), raise the bet by fixed fraction of bankroll (10%)
-      bankroll <- bet + bankroll
+      bankroll <- bet + bankroll #add the won bet value to initial bankroll value
       bet <- (bet + bankroll)*0.1 
     } else { #if lose hand, bet remains the same
-      bankroll <- bankroll - bet
+      bankroll <- bankroll - bet #subtract the lost bet value from the initial bankroll value
       bet <- bet
     }
     n <- n + 1 #increase the count by 1
@@ -54,7 +54,7 @@ gamblers_ruin <- function(bet, bankroll, p){ #inputs are the bet amount (bet), t
   return(n) #return the number of hands played
 }
 set.seed(1) #set.seed() to ensure replicability
-duration <- numeric()
+duration <- numeric() #initialize
 
 for (i in 1:5000){ #run the simulation 5000 times
   next_duration <- gamblers_ruin(100, 900, p = 0.5) #fill the duration vector using the gamblers_ruin function
@@ -98,7 +98,7 @@ gamblers_ruin_100 <- function(bet, bankroll, p){
   return(bankroll) #return the bankroll
 }
 
-bankroll <- numeric()
+bankroll <- numeric() #initialize
 for(i in 1:5000) #run simulation 5000 times
 {
   next_bankroll <- gamblers_ruin_100(100, 900, 0.5) #fill the bankroll vector using the modified gamblers_ruin function
@@ -159,22 +159,22 @@ markov <- function(bet, bankroll, p){
   prob <- p
   while (bet > 0) {
     probval <- runif(1)
-    if (probval <= p) {
+    if (probval <= p) { #if win game, add bet value to bankroll value; and increase probability of winning by 1%
       bankroll <- bankroll + bet
       p <- p + 0.01
-    }else {
+    }else { #if lose game, subtract bet value from bankroll value; and return probability of winning back to original input (p)
       bankroll <- bankroll - bet
       p <- prob
     }
-    n <- n + 1
+    n <- n + 1 #increase hand by 1
     if (n == 100000) { #simulate 100,000 sequential hands
       break
       }
-    if (bankroll < bet) {
+    if (bankroll < bet) { #if bankroll value is less than bet value, break
       break
       }
   }
-  return(bankroll)
+  return(bankroll) #return bankroll value
 }
 
 size <- numeric()
@@ -189,7 +189,7 @@ This is not a fair game because the mean size of my return is 0.
 ```{r}
 set.seed(1)
 prop = numeric()
-for (j in 1:20) {
+for (j in 1:20) { #loop to make process automatic
   size = numeric()
   for(i in 1:100) { #simulate 100 times
     next_size <- markov(100, 900, 0.46+0.002*j) #fill the size vector using the markov function
