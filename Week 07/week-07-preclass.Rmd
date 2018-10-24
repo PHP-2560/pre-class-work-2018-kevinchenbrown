@@ -155,7 +155,7 @@ Note: you *must* stop playing if your player has gone bust. How will you handle 
 ```{r}
 #build the markov function based off the gamblers_ruin function
 markov <- function(bet, bankroll, p){
-  n <- 0
+  n <- 0 #initialize count of hands
   prob <- p
   while (bet > 0) {
     probval <- runif(1)
@@ -177,7 +177,7 @@ markov <- function(bet, bankroll, p){
   return(bankroll) #return bankroll value
 }
 
-size <- numeric()
+size <- numeric() #initialize size vector
 for (i in 1:100) { #simulate 100 times
   next_size <- markov(100, 900, 0.48) #fill the size vector using the markov function
   size <- c(size, next_size)
@@ -188,9 +188,9 @@ This is not a fair game because the mean size of my return is 0.
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
 ```{r}
 set.seed(1)
-prop = numeric()
-for (j in 1:20) { #loop to make process automatic
-  size = numeric()
+prop = numeric() #initialize prop vector
+for (j in 1:20) { #loop to make process automatic, intend to have starting value between 46% and 50%
+  size = numeric() #initialize size vector
   for(i in 1:100) { #simulate 100 times
     next_size <- markov(100, 900, 0.46+0.002*j) #fill the size vector using the markov function
     size <- c(size, next_size)
@@ -227,9 +227,9 @@ markov_inc <- function(bet, bankroll, p, increment){
   return(bankroll)
 }
 
-prop = numeric()
-for (j in 1:20) {
-  size = numeric()
+prop = numeric() #initialize prop vector
+for (j in 1:20) { #repeat the process done in part b
+  size = numeric() #initialize size vector
   for(i in 1:100) { #simulate 100 times
     next_size <- markov_inc(100, 900, 0.48, 0.002*j) #fill the size vector using the markov_inc function
     size <- c(size, next_size)
