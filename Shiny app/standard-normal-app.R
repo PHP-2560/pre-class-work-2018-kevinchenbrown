@@ -1,18 +1,18 @@
 library(shiny)
+
 ui <- fluidPage(
-  titlePanel("Standard Normal Probabilities"),
-  h3("Input a z score below to calculate its correponding p-value."),
+  titlePanel("Standard Normal Probabilities"), 
+  h3("Input a z-score below to calculate its correponding p-value."),
   sidebarLayout(
     sidebarPanel(
-      numericInput("z")),
-    mainPanel(textOutput("p-value"))
-      
-      
-    )
-  )
-  
+      numericInput("z", "z-score", 0)), #define the input and assign it a default value of 0
+    mainPanel(
+      textOutput("p_value")) #define the output
+    ) 
+)
+
 server <- function(input, output) {
-  output$p-value <- reactive({pnorm(input$z)})
+  output$p_value <- reactive({pnorm(input$z)}) #calculate p-values using pnorm
 }
 
 shinyApp(ui = ui, server = server)
